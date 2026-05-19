@@ -1,0 +1,133 @@
+PRIMERA PARTE
+
+
+<!-- 1.ejercicio -->
+
+select * from customer where country = 'Brazil'
+
+<!-- 2.ejercicio -->
+
+select * from employee where title = 'Sales Support Agent'
+
+<!-- 3.ejercicio -->
+
+select * from track where composer = 'AC/DC' / 
+
+select * from track join album on track.album_id = album.album_id join artist on album.artist_id = artist.artist_id where artist.name = 'AC/DC' 
+
+<!-- 4.ejercicio -->
+
+select customer_id, first_name, last_name, country from customer where country != 'USA' /
+
+select customer_id, first_name || ' ' || last_name as nombre_completo, country from customer where country != 'USA'
+
+<!-- 5.ejercicio -->
+
+select first_name || ' ' || last_name as nombre_completo, concat_ws(',', city, state, country) as direccion, email from employee where title = 'Sales Support Agent'
+
+<!-- 6.ejercicio -->
+
+select distinct billing_country from invoice
+
+<!-- 7.ejercicio -->
+
+select state, count(*) as numero from customer where country = 'USA' group by state order by numero
+
+<!-- 8.ejercicio -->
+
+select sum(quantity) from invoice_line where invoice_id = 37 
+
+<!-- Ejercicio.9 -->
+
+select count(name) from track where composer = 'AC/DC' 
+
+<!-- Ejercicio 10 -->
+
+select sum(quantity) from invoice_line group by invoice_id 
+
+<!-- Ejercicio 11 -->
+
+select sum(quantity), billing_country from invoice_line join invoice on invoice_line.invoice_id = invoice.invoice_id group by billing_country
+
+<!-- Ejercicio 12 -->
+
+select count(invoice_id) from invoice where invoice_date between '2009-01-01' and '2011-12-31'
+
+
+
+
+select sum(quantity) from invoice_line join invoice on invoice_line.invoice_id = invoice.invoice_id where invoice.invoice_date  between '2009-01-01' and '2011-01-01'
+
+<!-- Ejercicio 13 -->
+
+select count(*) from invoice where invoice_date >= '2009-01-01' AND invoice_date <= '2011-12-31';
+
+<!-- Ejercicio 14 -->
+
+select count(customer_id) from customer where country in ('Brazil', 'Spain') 
+
+<!-- Ejercicio 15 -->
+
+select name from track where name like 'You%'
+
+
+
+
+SEGUNDA PARTE
+
+
+
+1.ejercicio
+
+select invoice_id, invoice_date, billing_country from invoice join customer ON invoice.customer_id = customer.customer_id WHERE invoice.billing_country = 'Brazil';
+
+2.ejercicio
+
+select employee.first_name || ' ' || employee.last_name as nombre_completo, title, invoice.invoice_id from employee join customer on employee.employee_id = customer.support_rep_id join invoice ON customer.customer_id = invoice.customer_id where employee.title = 'Sales Support Agent' 
+
+3.ejercicio 
+
+select customer.first_name || ' ' || customer.last_name as nombre_completo, customer.country, employee.first_name || ' ' || employee.last_name as nombre_agente, invoice.total from customer join employee on customer.support_rep_id = employee.employee_id join invoice on customer.customer_id = invoice.customer_id  
+
+4.ejercicio
+
+select invoice_line_id, invoice_line.invoice_id, track.name from invoice_line join track on invoice_line.track_id = track.track_id
+
+5. ejercicio
+
+select track.name, media_type.name, album.title, genre.name from track join media_type on track.media_type_id = media_type.media_type_id join album on track.album_id = album.album_id join genre on track.genre_id = genre.genre_id
+
+6.ejercicio
+
+SELECT p.name AS nombre_playlist, count(pt.track_id) AS total_cancione FROM playlist AS p JOIN playlist_track AS pt ON p.playlist_id = pt.playlist_id GROUP BY p.playlist_id, p.name;
+
+7.ejercicio
+
+SELECT e.first_name || ' ' || e.last_name AS nombre_empleado,sum(i.total) AS total_vendido FROM employee AS e JOIN customer AS c ON e.employee_id = c.support_rep_id JOIN invoice AS i ON c.customer_id = i.customer_id WHERE e.title = 'Sales Support Agent' GROUP BY e.employee_id, e.first_name, e.last_name;
+
+8. ejercicio
+
+SELECT e.first_name || ' ' || e.last_name AS nombre_agente, sum(i.total) AS total_vendido_2009 FROM employee AS e JOIN customer AS c ON e.employee_id = c.support_rep_id JOIN invoice AS i ON c.customer_id = i.customer_id WHERE i.invoice_date BETWEEN '2009-01-01' AND '2009-12-31' GROUP BY e.employee_id, e.first_name, e.last_name
+
+9.ejercicio 
+
+SELECT art.name AS nombre_grupo, sum(il.unit_price * il.quantity) AS total_venta FROM artist AS art JOIN album AS alb ON art.artist_id = alb.artist_id JOIN track AS t ON alb.album_id = t.album_id JOIN invoice_line AS il ON t.track_id = il.track_id GROUP BY art.artist_id, art.name ORDER BY total_ventas DESC LIMIT 3;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
